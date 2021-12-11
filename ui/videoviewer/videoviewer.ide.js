@@ -1,7 +1,7 @@
 /* global TW */
 TW.IDE.Widgets.videoviewer = function () {
   this.widgetIconUrl = function () {
-    return '../Common/extensions/VideoWidget/ui/videoviewer/video.png';
+    return '../Common/extensions/VideoViewerWidget/ui/videoviewer/video.png';
   };
 
   this.widgetProperties = function () {

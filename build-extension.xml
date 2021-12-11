@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<project name="VideoWidget" basedir="." default="build"> 
+<project name="VideoViewerWidget" basedir="." default="build"> 
  
-  <property name="extension.jar" value="videowidget.jar" /> 
+  <property name="extension.jar" value="videoviewerwidget.jar" /> 
  
   <property name="target"         value="1.8" /> 
   <property name="source"         value="1.8" /> 

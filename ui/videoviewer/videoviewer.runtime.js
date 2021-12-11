@@ -1,6 +1,6 @@
 /* global TW */
-$("head").append('<link href="../Common/extensions/VideoWidget/ui/videoviewer/jslibrary/video-js.css" rel="stylesheet">');
-$("body").append('<script type="text/javascript" src="../Common/extensions/VideoWidget/ui/videoviewer/jslibrary/video.js"></script>');
+$("head").append('<link href="../Common/extensions/VideoViewerWidget/ui/videoviewer/jslibrary/video-js.css" rel="stylesheet">');
+$("body").append('<script type="text/javascript" src="../Common/extensions/VideoViewerWidget/ui/videoviewer/jslibrary/video.js"></script>');
 
 document.addEventListener("fullscreenchange", function () {
   $('.widget-videoviewer .video-js .vjs-control-bar').each(function () {

@@ -2,7 +2,7 @@
 <Entities>
   <ExtensionPackages>
     <ExtensionPackage 
-      name="VideoWidget"
+      name="VideoViewerWidget"
       packageVersion="1.0.2"
       vendor="Accenture Italy - Industry X"
       description="Extension to manage video files"
