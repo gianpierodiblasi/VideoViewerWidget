@@ -42,29 +42,30 @@ TW.Runtime.Widgets.videoviewer = function () {
       var videoJS = thisWidget.getProperty('videoJS');
       var srcMode = thisWidget.getProperty('srcMode');
       var autoplay = thisWidget.getProperty('autoplay');
+      var startTime = thisWidget.getProperty('startTime');
       var debugMode = thisWidget.getProperty('debugMode');
 
       if (debugMode) {
-        console.log("VideoViewer - Load -> url = " + url + ", videoJS = " + videoJS + ", srcMode = " + srcMode + ", autoplay = " + autoplay);
+        console.log("VideoViewer - Load -> url = " + url + ", videoJS = " + videoJS + ", srcMode = " + srcMode + ", autoplay = " + autoplay + ", startTime = " + startTime);
       }
 
       switch (srcMode) {
         case "URL":
-          thisWidget.createVideoTag(url, "", videoJS, autoplay);
+          thisWidget.createVideoTag(url, "", videoJS, autoplay, startTime);
           break;
         case "BASE64":
-          thisWidget.loadVideo(url, videoJS, autoplay, debugMode);
+          thisWidget.loadVideo(url, videoJS, autoplay, startTime, debugMode);
           break;
       }
     }
   };
 
-  this.createVideoTag = function (src, mimeType, videoJS, autoplay) {
+  this.createVideoTag = function (src, mimeType, videoJS, autoplay, startTime) {
     var videoUID = uid + "_" + Math.floor(1000 * Math.random());
 
     if (videoJS) {
       $('<video id="widget-videoviewer-' + videoUID + '" class="video-js" controls preload="auto"></video>').
-              append('<source src="' + src + '" type="' + mimeType + '"></source>').
+              append('<source src="' + src + '#t=' + startTime + '" type="' + mimeType + '"></source>').
               appendTo($('.widget-videoviewer-' + uid));
 
       videojs('widget-videoviewer-' + videoUID, {"fluid": true}, function () {
@@ -75,18 +76,29 @@ TW.Runtime.Widgets.videoviewer = function () {
         $('.widget-videoviewer-' + uid + ' .video-js .vjs-control-bar .vjs-progress-control').css("display", display);
         $('.widget-videoviewer-' + uid + ' .video-js .vjs-control-bar .vjs-remaining-time').css("display", display);
 
+        this.on("timeupdate", () => {
+          thisWidget.setProperty("currentTime", this.currentTime());
+          thisWidget.jqElement.triggerHandler("CurrentTimeChanged");
+        });
+
         if (autoplay) {
           this.play();
         }
       });
     } else {
       $('<video id="widget-videoviewer-' + videoUID + '" class="widget-videoviewer-video" controls preload="auto"' + (autoplay ? ' autoplay' : '') + '></video>').
-              append('<source src="' + src + '" type="' + mimeType + '"></source>').
+              append('<source src="' + src + '#t=' + startTime + '" type="' + mimeType + '"></source>').
               appendTo($('.widget-videoviewer-' + uid));
+
+      var video = document.getElementById('widget-videoviewer-' + videoUID);
+      video.ontimeupdate = event => {
+        thisWidget.setProperty("currentTime", video.currentTime);
+        thisWidget.jqElement.triggerHandler("CurrentTimeChanged");
+      };
     }
   };
 
-  this.loadVideo = function (url, videoJS, autoplay, debugMode) {
+  this.loadVideo = function (url, videoJS, autoplay, startTime, debugMode) {
     var xhttp = new XMLHttpRequest();
     xhttp.open('GET', url);
     xhttp.responseType = 'arraybuffer';
@@ -98,7 +110,7 @@ TW.Runtime.Widgets.videoviewer = function () {
           var bin = "";
           new Uint8Array(this.response).forEach(byte => bin += String.fromCharCode(byte));
           var base64 = "data:" + mimeType + ";base64," + btoa(bin);
-          thisWidget.createVideoTag(base64, mimeType, videoJS, autoplay);
+          thisWidget.createVideoTag(base64, mimeType, videoJS, autoplay, startTime);
         } else {
           if (debugMode) {
             console.log("VideoViewer - error");
@@ -116,6 +128,8 @@ TW.Runtime.Widgets.videoviewer = function () {
       this.setProperty("url", updatePropertyInfo.RawSinglePropertyValue);
     } else if (updatePropertyInfo.TargetProperty === 'autoplay') {
       this.setProperty("autoplay", updatePropertyInfo.RawSinglePropertyValue);
+    } else if (updatePropertyInfo.TargetProperty === 'startTime') {
+      this.setProperty("startTime", updatePropertyInfo.RawSinglePropertyValue);
     } else if (updatePropertyInfo.TargetProperty === 'videoJS') {
       this.setProperty("videoJS", updatePropertyInfo.RawSinglePropertyValue);
     } else if (updatePropertyInfo.TargetProperty === 'srcMode') {

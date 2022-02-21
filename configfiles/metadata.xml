@@ -3,7 +3,7 @@
   <ExtensionPackages>
     <ExtensionPackage 
       name="VideoViewerWidget"
-      packageVersion="1.0.2"
+      packageVersion="1.2.3"
       vendor="Accenture Italy - Industry X"
       description="Extension to show a video viewer"
       minimumThingWorxVersion="8.3.0"

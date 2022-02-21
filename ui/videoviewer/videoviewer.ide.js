@@ -39,6 +39,22 @@ TW.IDE.Widgets.videoviewer = function () {
           'defaultValue': false,
           'description': 'true for the autoplay'
         },
+        'startTime': {
+          'isVisible': true,
+          'baseType': 'INTEGER',
+          'isEditable': true,
+          'isBindingTarget': true,
+          'defaultValue': 0,
+          'description': 'the start time (in seconds)'
+        },
+        'currentTime': {
+          'isVisible': true,
+          'baseType': 'NUMBER',
+          'isEditable': false,
+          'isBindingSource': true,
+          'defaultValue': 0,
+          'description': 'the current time (in seconds)'
+        },
         'videoJS': {
           'isVisible': true,
           'baseType': 'BOOLEAN',
@@ -72,7 +88,8 @@ TW.IDE.Widgets.videoviewer = function () {
   this.widgetEvents = function () {
     return {
       'Loaded': {},
-      'Failed': {}
+      'Failed': {},
+      'CurrentTimeChanged': {}
     };
   };
 };
